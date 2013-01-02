@@ -38,8 +38,8 @@ public class GameWindow extends JPanel {
 		myGame.paint(offscr);
 		
     		g.drawImage(offscreenImage,0,0,this);
-		g.drawLine(0,0,Width,Height);
-		g.drawLine(0,Height,Width,0);
+		//g.drawLine(0,0,Width,Height);
+		//g.drawLine(0,Height,Width,0);
 	}
 
 	public void init() {
