@@ -7,8 +7,7 @@ import java.util.TimerTask;
 import java.util.Timer;
 import java.util.ArrayList;
 
-public class Game implements Runnable
-{
+public class Game implements Runnable {
 	//Display Window.
 	GameWindow myWindow;
 
@@ -27,10 +26,12 @@ public class Game implements Runnable
 	ArrayList<Pot> roundsPot;
 	BalanceNode theNode;
 	int movementFactor;
+	int frameCount = 1;
+        int tickRate = 50;
+	int fps = (int)Math.ceil((1000 / tickRate) / 25);
 
 
-	public Game(String arg[], GameWindow inwindow)
-	{
+	public Game(String arg[], GameWindow inwindow) {
 		movementFactor = 0;
 		this.myWindow = inwindow;
 		seats = new ArrayList<Player>();
@@ -53,51 +54,37 @@ public class Game implements Runnable
 		run();
 	}
 	
-	public void run()
-	{
-		long frameRate = (1000/40);
-		SwingTimerTask gameTimer = new SwingTimerTask(){
-			public void doRun(){
+	public void run() {
+		SwingTimerTask gameTimer = new SwingTimerTask() {
+			public void doRun() {
 				gameTick();
 			}
 		};
-		SwingTimerTask secondTimer = new SwingTimerTask(){
-			public void doRun(){
-				secondTick();
-			}
-		};
-		timer.schedule(gameTimer, 0, frameRate);
-		timer.schedule(secondTimer, 0, 1000);
+		timer.schedule(gameTimer, 0, tickRate);
 	}
 	
-	public void gameTick()
-	{
-		if (theNode != null)
-		{
+	public void gameTick() {
+		if (theNode != null) {
 			theNode.nudge(movementFactor);
 			theNode.roll();
 		}
-		dealingPlayer.animate();
-		myWindow.repaint();
-	}
-	
-	public void secondTick()
-	{
-		if (theNode != null)
-		{
-			int randomInt = randomGenerator.nextInt(100);
-			if (randomInt < theNode.getFailChance())
-			{
-				theNode = null;
-				humanPlayer.spottedCheating();
-			}
+		if (frameCount >= fps) {
+			if (theNode != null) {
+				int randomInt = randomGenerator.nextInt(100);
+				if (randomInt < theNode.getFailChance()) {
+					theNode = null;
+					humanPlayer.spottedCheating();
+				}
+			}	
+			frameCount = 0;
+			dealingPlayer.animate();
+			myWindow.repaint();
 		}
+		frameCount++;
 	}
 	
-	public void keydown(KeyEvent keyVal)
-	{
-		switch (keyVal.getKeyChar())
-		{
+	public void keydown(KeyEvent keyVal) {
+		switch (keyVal.getKeyChar()) {
 			case 'a':
 				movementFactor = -3;
 				break;
@@ -118,10 +105,8 @@ public class Game implements Runnable
 		}
 	}
 
-	public void keyup(KeyEvent keyVal)
-	{
-		switch (keyVal.getKeyChar())
-		{
+	public void keyup(KeyEvent keyVal) {
+		switch (keyVal.getKeyChar()) {
 			case 'a':
 				movementFactor = 0;
 				break;
@@ -132,34 +117,28 @@ public class Game implements Runnable
 		}
 	}
 	
-	private int getNodePosition()
-	{
+	private int getNodePosition() {
 		if (theNode != null)
 			return theNode.getNodePosition();
 		return 0;
 	}
 	
-	private boolean inBalanceMode()
-	{
-		if(theNode != null)
-			return true;
-		return false;
+	private boolean inBalanceMode() {
+		return (theNode != null);
 	}
 	
 	//Draw all of the game components to the supplied graphics object.
-    public void paint(Graphics g){
+	public void paint(Graphics g) {
 		int offsetX = 10;
 		int offsetY = 20;
 		int colNum = 0;
 		int rowNum = 0;
 		int colWidth = (int)Math.round(myWindow.Width / 4);
 		int rowHeight = 200;
-		for(Player player : seats)
-		{
+		for(Player player : seats) {
 			player.paint(g, offsetX + (colNum * colWidth), offsetY + (rowNum * rowHeight));
 			colNum++;
-			if(colNum > 3)
-			{
+			if(colNum > 3) {
 				colNum = 0;
 				rowNum++;
 			}
@@ -171,14 +150,12 @@ public class Game implements Runnable
 			theNode.paint(g, (int)(myWindow.Width / 2), (int)(myWindow.Height * .90));
 	}
 	
-	private void newRound()
-	{
+	private void newRound() {
 		roundsPot.clear();
 		Pot mainPot = new Pot(seats);
 		roundsPot.add(mainPot);
 		sharedHand.clear();
-		for(Player player : seats)
-		{
+		for(Player player : seats) {
 			player.newRound();
 		}
 	}
