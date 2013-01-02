@@ -80,7 +80,7 @@ public class BalanceNode {
 		g.drawLine((offsetX-100),(offsetY+5),(offsetX-40),(offsetY+5));
 		g.drawLine((offsetX+40),(offsetY+5),(offsetX+100),(offsetY+5));
 		g.setColor(Color.green);
-		g.drawLine((offsetX-40),(offsetY+5),(offsetX+40),(offsetY+5));
+		g.drawLine((offsetX-39),(offsetY+5),(offsetX+39),(offsetY+5));
 		g.setColor(Color.black);
 		g.drawString("V",(offsetX+getNodePosition()), offsetY);
 	}

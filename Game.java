@@ -70,10 +70,16 @@ public class Game implements Runnable {
 		}
 		if (frameCount >= fps) {
 			if (theNode != null) {
+				//There is a 3/4 chance that the dealer will just be looking somewhere else at the time you are cheating.
 				int randomInt = randomGenerator.nextInt(100);
-				if (randomInt < theNode.getFailChance()) {
-					theNode = null;
-					humanPlayer.spottedCheating();
+				if (randomInt < 25) {
+					randomInt = randomGenerator.nextInt(100);
+					if (randomInt < theNode.getFailChance()) {
+						String s = "Spotted cheating at " + Integer.toString(theNode.getFailChance());
+						System.console().writer().println(s);
+						theNode = null;
+						humanPlayer.spottedCheating();
+					}
 				}
 			}	
 			frameCount = 0;
