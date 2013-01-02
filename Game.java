@@ -89,34 +89,34 @@ public class Game implements Runnable {
 		frameCount++;
 	}
 	
-	public void keydown(KeyEvent keyVal) {
-		switch (keyVal.getKeyChar()) {
-			case 'a':
+	public void keydown(PokerFaceEvent event) {
+		switch (event) {
+			case NUDGE_LEFT:
 				movementFactor = -3;
 				break;
-			case 'd':
+			case NUDGE_RIGHT:
 				movementFactor = 3;
 				break;
-			case 'b':
+			case ACTIVATE_BALANCE:
 				theNode = new BalanceNode(-1, false);
 				break;
-			case 'n':
+			case DEAL:
 				newRound();
 				dealingPlayer.startDeal(seats.get(2), new Card(3,3));
 				break;
-			case 'q':
+			case QUIT:
 				System.exit(0);
 				//handler to quit out here.
 			default:
 		}
 	}
 
-	public void keyup(KeyEvent keyVal) {
-		switch (keyVal.getKeyChar()) {
-			case 'a':
+	public void keyup(PokerFaceEvent event) {
+		switch (event) {
+			case NUDGE_LEFT:
 				movementFactor = 0;
 				break;
-			case 'd':
+			case NUDGE_RIGHT:
 				movementFactor = 0;
 				break;
 			default:

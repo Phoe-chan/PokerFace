@@ -56,8 +56,8 @@ public class GameWindow extends JPanel {
 		ppanel.setSize(Width,Height);
 		
 		myGame = new Game(arg, ppanel);  //create the game based on the parameters passed through.
-		
-		ppanel.addKeyListener(new KeypressHandler(myGame));
+		KeyMapper myMapper = new KeyMapper();	
+		ppanel.addKeyListener(new KeypressHandler(myGame, myMapper));
 	 	   					
         	fframe.setContentPane(ppanel);
         	fframe.setVisible(true);
